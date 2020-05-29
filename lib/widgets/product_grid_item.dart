@@ -28,37 +28,43 @@ class ProductGridItem extends StatelessWidget {
           ),
           footer: GridTileBar(
             backgroundColor: Colors.black87,
-            leading:
-             Consumer<Product>(
-              builder: (ctx, product, _) => 
-              IconButton(
+            leading: Consumer<Product>(
+              builder: (ctx, product, _) => IconButton(
                 icon: Icon(product.isFavorite
                     ? Icons.favorite
                     : Icons.favorite_border),
                 color: Theme.of(context).accentColor,
-                onPressed: () {
-                  product.toggleFavorite();
+                onPressed: () async {
+                  try {
+                    await product.toggleFavorite(product);
+                  } catch (error) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        duration: Duration(seconds: 1),
+                        content: Text(error.toString()),
+                      ),
+                    );
+                  }
                 },
               ),
             ),
+            // title: Text(product.isFavorite.toString()),
             title: Text(product.title),
             trailing: IconButton(
               icon: Icon(Icons.shopping_cart),
               color: Theme.of(context).accentColor,
               onPressed: () {
                 Scaffold.of(context).hideCurrentSnackBar();
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    duration: Duration(seconds: 2),
-                    content: Text("Item adicionado com sucesso!"),
-                    action: SnackBarAction(
-                      label: 'DESFAZER',
-                      onPressed: (){
-                        cart.removeSingleItem(product.id);
-                      },
-                    ),
-                  )
-                );
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  duration: Duration(seconds: 2),
+                  content: Text("Item adicionado com sucesso!"),
+                  action: SnackBarAction(
+                    label: 'DESFAZER',
+                    onPressed: () {
+                      cart.removeSingleItem(product.id);
+                    },
+                  ),
+                ));
                 cart.addItem(product);
               },
             ),

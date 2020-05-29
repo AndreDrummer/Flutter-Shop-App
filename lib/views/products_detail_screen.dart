@@ -28,7 +28,7 @@ class ProductDetailScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
-                  "R\$ ${product.description}",
+                  "${product.description}",
                   textAlign: TextAlign.center,
                 ),
               )
