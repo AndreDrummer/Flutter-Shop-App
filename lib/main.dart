@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // packages
 import 'package:shop/utils/app_routes.dart';
+import 'package:shop/views/auth_home_screen.dart';
 import 'package:shop/views/cart_screen.dart';
 import 'package:shop/views/orders_screen.dart';
 import 'package:shop/views/productsScreen.dart';
@@ -10,7 +11,6 @@ import 'package:shop/views/products_form_screen.dart';
 
 // telas
 import './views/products_detail_screen.dart';
-import './views/auth_screen.dart';
 
 // providiers
 import './providers/products.dart';
@@ -26,17 +26,19 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => Products(),
+          create: (_) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (BuildContext context, auth, previousProducts) => Products(auth.token, auth.userId, previousProducts.items),
+          create: (_) => Products(),        
         ),
         ChangeNotifierProvider(
           create: (_) => Cart(),
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (BuildContext context, auth, previousOrder) => Orders(auth.token, auth.userId,previousOrder.items),
           create: (_) => Orders(),
         ),
-        ChangeNotifierProvider(
-          create: (_) => Auth(),
-        )
       ],
       child: MaterialApp(
         title: 'Minha Loja',
@@ -45,10 +47,9 @@ class MyApp extends StatelessWidget {
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato'),
         debugShowCheckedModeBanner: false,
-        // home: AuthScreen(),
+        // home: AuthScrseen(),
         routes: {
-          AppRoutes.AUTH: (ctx) => AuthScreen(),
-          AppRoutes.HOME: (ctx) => ProductDetailScreen(),
+          AppRoutes.AUTH_HOME_SCREEN: (ctx) => AuthOrHomeScreen(),                     
           AppRoutes.PRODUCTS_DETAIL: (ctx) => ProductDetailScreen(),
           AppRoutes.CART: (ctx) => CartScreen(),
           AppRoutes.ORDERS: (ctx) => OrdersScreen(),

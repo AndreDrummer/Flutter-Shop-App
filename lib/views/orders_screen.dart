@@ -12,7 +12,7 @@ class OrdersScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Meus Pedidos")),
         drawer: AppDrawer(),
@@ -29,11 +29,12 @@ class OrdersScreen extends StatelessWidget {
                 child: Consumer<Orders>(
                   builder: (context, orders, child) {
                     return ListView.builder(
-                    itemCount: orders.itemsCount,
-                    itemBuilder: (_, i) => OrderItemWidget(orders.items[i]));
-                  },                                  
-                  ),
-                );              
+                        itemCount: orders.itemsCount,
+                        itemBuilder: (_, i) =>
+                            OrderItemWidget(orders.items[i]));
+                  },
+                ),
+              );
             }
           },
         ));

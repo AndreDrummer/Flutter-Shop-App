@@ -16,23 +16,23 @@ class _AuthCardState extends State<AuthCard> {
   Map<String, String> _authData = {'email': '', 'password': ''};
   final _passwordController = TextEditingController();
   var _authMode = AuthMode.Login;
+  bool _isLoading = false;
 
   void _showDialogErrors(String msg) {
     showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text("Ocorreu um erro!"),
-        content: Text(msg),
-        actions: <Widget>[
-          FlatButton(
-            child: Text("Fechar"),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
-        ],
-      )
-    );
+        context: context,
+        builder: (ctx) => AlertDialog(
+              title: Text("Ocorreu um erro!"),
+              content: Text(msg),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Fechar"),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
   }
 
   Future<void> _submit() async {
@@ -44,21 +44,26 @@ class _AuthCardState extends State<AuthCard> {
     Auth auth = Provider.of(context, listen: false);
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (_authMode == AuthMode.Signup) {
-      await auth.signup(
-        _authData["email"].toString().trim(),
-        _authData["password"],
-      );
-    } else {
-      await auth.login(
-        _authData["email"].toString().trim(),
-        _authData["password"],
-      );
-    }
-    } on AuthException catch(error) {
+        await auth.signup(
+          _authData["email"].toString().trim(),
+          _authData["password"],
+        );
+      } else {
+        await auth.login(
+          _authData["email"].toString().trim(),
+          _authData["password"],
+        );
+      }
+    } on AuthException catch (error) {
       _showDialogErrors(error.toString());
+      setState(() {
+        _isLoading = false;
+      });
     }
-
   }
 
   void _switchAuthMode() {
@@ -131,7 +136,7 @@ class _AuthCardState extends State<AuthCard> {
                 Spacer(),
                 Container(
                   margin: const EdgeInsets.all(15),
-                  child: RaisedButton(
+                  child: _isLoading ? CircularProgressIndicator() : RaisedButton(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),

@@ -13,23 +13,25 @@ class Product with ChangeNotifier {
   final String imageUrl;
   bool isFavorite;
 
-  Product(
-      {this.id,
-      @required this.title,
-      @required this.description,
-      @required this.price,
-      @required this.imageUrl,
-      this.isFavorite = false});
+  Product({
+    this.id,
+    @required this.title,
+    @required this.description,
+    @required this.price,
+    @required this.imageUrl,
+    this.isFavorite = false,
+  });
 
-  Future<void> toggleFavorite(product) async {
-    const _baseUrl = "${Constantes.BASE_API_URL}/products";
+  Future<void> toggleFavorite(String id, String token, String userId) async {
+    const _baseUrl = "${Constantes.BASE_API_URL}";
 
     this.isFavorite = !this.isFavorite;
     notifyListeners();
 
-    final response = await http.patch("$_baseUrl/${product.id}.json", body: json.encode({ 
-      "isFavorite": this.isFavorite,
-    }));
+    final response = await http.put(
+      "$_baseUrl/userFavorites/$userId/$id.json?auth=$token",
+      body: json.encode(this.isFavorite),
+    );
 
     if (response.statusCode >= 400) {
       this.isFavorite = !this.isFavorite;
