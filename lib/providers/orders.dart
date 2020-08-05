@@ -29,7 +29,8 @@ class Orders with ChangeNotifier {
   int get itemsCount => _items.length;
 
   Future<void> addOrder(Cart cart) async {
-    final _baseUrl = "${Constantes.BASE_API_URL}/orders/$_userId.json?auth=$_token";
+    final _baseUrl =
+        "${Constantes.BASE_API_URL}/orders/$_userId.json?auth=$_token";
     final date = DateTime.now();
     final response = await http.post(
       _baseUrl,
@@ -61,14 +62,15 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> loadOrders() async {
-    final _baseUrl = "${Constantes.BASE_API_URL}/orders/$_userId.json?auth=$_token";
+    final _baseUrl =
+        "${Constantes.BASE_API_URL}/orders/$_userId.json?auth=$_token";
     final response = await http.get(_baseUrl);
-    Map<String, dynamic> order = json.decode(response.body);
-
+    Map<String, dynamic> order = json.decode(response.body);    
     _items.clear();
 
     order.forEach((orderId, orderData) => {
-          _items.add(Order(
+          _items.add(
+            Order(
               id: orderId,
               date: DateTime.parse(orderData['date']),
               total: orderData['total'],
@@ -80,7 +82,9 @@ class Orders with ChangeNotifier {
                   price: product['price'],
                   quantity: product['quantity'],
                 );
-              }).toList()))
+              }).toList(),
+            ),
+          )
         });
 
     notifyListeners();

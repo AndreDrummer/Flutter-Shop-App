@@ -10,6 +10,7 @@ class Store {
 
   static Future<void> saveMap(String key, Map<String, dynamic> value) {
     saveString(key, json.encode(value));
+    return Future.value();
   }
 
   static Future<String> getString(String key) async {

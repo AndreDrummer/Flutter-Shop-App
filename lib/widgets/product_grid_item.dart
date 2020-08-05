@@ -9,9 +9,9 @@ import '../utils/app_routes.dart';
 class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-     Product product = Provider.of(context, listen: false);
-     Cart cart = Provider.of(context, listen: false);
-     Auth auth = Provider.of(context, listen: false);    
+    Product product = Provider.of(context, listen: false);
+    Cart cart = Provider.of(context, listen: false);
+    Auth auth = Provider.of(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -23,9 +23,15 @@ class ProductGridItem extends StatelessWidget {
                 arguments: product,
               );
             },
-            child: Image.network(
-              product.imageUrl,
-              fit: BoxFit.cover,
+            child: Hero(
+              tag: product.id,
+              child: FadeInImage(
+                placeholder: AssetImage('assets/images/product-placeholder.png'),
+                image: NetworkImage(
+                  product.imageUrl,
+                ),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           footer: GridTileBar(
@@ -38,7 +44,8 @@ class ProductGridItem extends StatelessWidget {
                 color: Theme.of(context).accentColor,
                 onPressed: () async {
                   try {
-                    await product.toggleFavorite(product.id, auth.token, auth.userId);
+                    await product.toggleFavorite(
+                        product.id, auth.token, auth.userId);
                   } catch (error) {
                     Scaffold.of(context).showSnackBar(
                       SnackBar(
@@ -49,7 +56,7 @@ class ProductGridItem extends StatelessWidget {
                   }
                 },
               ),
-            ),            
+            ),
             title: Text(product.title),
             trailing: IconButton(
               icon: Icon(Icons.shopping_cart),

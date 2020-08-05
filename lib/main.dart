@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // packages
 import 'package:shop/utils/app_routes.dart';
+import 'package:shop/utils/custom_route.dart';
 import 'package:shop/views/auth_home_screen.dart';
 import 'package:shop/views/cart_screen.dart';
 import 'package:shop/views/orders_screen.dart';
@@ -29,27 +30,35 @@ class MyApp extends StatelessWidget {
           create: (_) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          update: (BuildContext context, auth, previousProducts) => Products(auth.token, auth.userId, previousProducts.items),
-          create: (_) => Products(),        
+          update: (BuildContext context, auth, previousProducts) =>
+              Products(auth.token, auth.userId, previousProducts.items),
+          create: (_) => Products(),
         ),
         ChangeNotifierProvider(
           create: (_) => Cart(),
         ),
         ChangeNotifierProxyProvider<Auth, Orders>(
-          update: (BuildContext context, auth, previousOrder) => Orders(auth.token, auth.userId,previousOrder.items),
+          update: (BuildContext context, auth, previousOrder) =>
+              Orders(auth.token, auth.userId, previousOrder.items),
           create: (_) => Orders(),
         ),
       ],
       child: MaterialApp(
         title: 'Minha Loja',
         theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
-            fontFamily: 'Lato'),
+          primarySwatch: Colors.purple,
+          accentColor: Colors.deepOrange,
+          fontFamily: 'Lato',
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: {
+              TargetPlatform.android: CustomPageTransitionsBuilder(),
+              TargetPlatform.iOS: CustomPageTransitionsBuilder(),
+            }
+          )
+        ),
         debugShowCheckedModeBanner: false,
-        // home: AuthScrseen(),
         routes: {
-          AppRoutes.AUTH_HOME_SCREEN: (ctx) => AuthOrHomeScreen(),                     
+          AppRoutes.AUTH_HOME_SCREEN: (ctx) => AuthOrHomeScreen(),
           AppRoutes.PRODUCTS_DETAIL: (ctx) => ProductDetailScreen(),
           AppRoutes.CART: (ctx) => CartScreen(),
           AppRoutes.ORDERS: (ctx) => OrdersScreen(),

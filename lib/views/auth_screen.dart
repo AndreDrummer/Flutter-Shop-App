@@ -22,33 +22,38 @@ class AuthScreen extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(              
-                transform: Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 3
-                ),
-                margin: EdgeInsets.only(bottom: 20),
-                decoration: BoxDecoration(
-                  color: Colors.orange.shade900,                
-                  borderRadius: BorderRadius.circular(15.0)
-                ),
-                child: Text(
-                  "Minha Loja",
-                  style: TextStyle(
-                      color: Theme.of(context).accentTextTheme.headline6.color,
-                      fontFamily: 'Anton',
-                      fontSize: 45),
-                ),
+        Center(
+          child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 50),
+                  Container(              
+                    transform: Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 50,
+                      vertical: 3
+                    ),
+                    margin: EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.orange.shade900,                
+                      borderRadius: BorderRadius.circular(15.0)
+                    ),
+                    child: Text(
+                      "Minha Loja",
+                      style: TextStyle(
+                          color: Theme.of(context).accentTextTheme.headline6.color,
+                          fontFamily: 'Anton',
+                          fontSize: 45),
+                    ),
+                  ),
+                  AuthCard()
+                ],
               ),
-              AuthCard()
-            ],
+            ),
           ),
         )
       ],
